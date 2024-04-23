@@ -37,6 +37,15 @@ def change_bom_size(tmr:int,bom:pg.Surface):
     #return bom_img
     return 0
 
+def trans_chara(button:str, chara:pg.Surface):
+    """
+    概要: キャラクターの向きを変更する
+    引数: button: 押されたキー, chara: キャラクターの画像
+    戻り値: キャラクターの画像
+    """
+    return 0
+
+
 def homing_bom(pos:tuple, bom_pos:tuple):
     """
     概要: 定期的に爆弾がキャラクターに向かって移動する
