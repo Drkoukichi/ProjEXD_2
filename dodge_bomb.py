@@ -16,6 +16,25 @@ def change_rotation():
     if key_lst[pg.K_UP]:
         pass
 
+def homing_bom(pos:tuple, bom_pos:tuple):
+    """
+    概要: 定期的に爆弾がキャラクターに向かって移動する
+    引数: キャラクターの位置、爆弾の位置
+    返り値: 爆弾のdx,dy
+    """
+    # 二点の座標の差を求める
+    dx = pos[0] - bom_pos[0]
+    dy = pos[1] - bom_pos[1]
+    # 二点間の距離を求める
+    diff = (dx**2 + dy**2)**0.5
+
+    if diff <= 300 :
+        return [0,0]
+
+    x = dx / diff * 5
+    y = dy / diff * 5
+    return [x, y]
+
 def gameover(screen:pg.Surface):
     """
     概要: ゲームオーバー画面を表示する
@@ -72,7 +91,7 @@ def colision_check(rect1:pg.Rect, rect2:pg.Rect):
     """
     #return rect1.colliderect(rect2)
     diff = ((rect1.x - rect2.x)**2 + (rect1.y - rect2.y)**2)**0.5
-    print (diff)
+    #print (diff)
     if diff < 50:
         return True
     else:
@@ -154,6 +173,15 @@ def main():
             print("Game Over")
             #gameoverフラグを立てる
             break
+
+        # 5フレームに1回爆弾の向きを変える
+        
+        if tmr % 10 == 0:
+            new_move = homing_bom(kk_rct.topleft, bom_rect.topleft)
+            if new_move != [0, 0]:
+                bom_vx = new_move[0]
+                bom_vy = new_move[1]
+        
         pg.display.update()
         tmr += 1
         clock.tick(50)
