@@ -35,7 +35,13 @@ def colision_check(rect1:pg.Rect, rect2:pg.Rect):
     引数: rect1, rect2
     戻り値: 重なっていたらTrue, それ以外はFalse
     """
-    return rect1.colliderect(rect2)
+    #return rect1.colliderect(rect2)
+    diff = ((rect1.x - rect2.x)**2 + (rect1.y - rect2.y)**2)**0.5
+    print (diff)
+    if diff < 50:
+        return True
+    else:
+        return False
 
 
 def main():
@@ -55,7 +61,7 @@ def main():
     bom_rect.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     bom_vx = 5
     bom_vy = 5
-    print(type(bom_rect))
+    #print(type(bom_rect))
 
     clock = pg.time.Clock()
     tmr = 0
@@ -69,7 +75,7 @@ def main():
     }
 
     while True:
-        print(kk_rct.topleft)
+        #print(kk_rct.topleft)
 
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -105,6 +111,11 @@ def main():
         # 爆弾の移動
         bom_rect.move_ip(bom_vx, bom_vy)
         screen.blit(kk_img, kk_rct)
+        # 爆弾とキャラクターが重なっているかどうかを判定
+        if colision_check(kk_rct, bom_rect):
+            print("Game Over")
+            return
+
         pg.display.update()
         tmr += 1
         clock.tick(50)
