@@ -6,6 +6,37 @@ import random
 WIDTH, HEIGHT = 1600, 900
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+def check_wall_collision(pos:tuple):
+    """
+    概要: 画面端に到達したかどうかを判定する
+    引数: pos: 対象の位置
+    戻り値: 対象が左右で到達していたら1, 上下で到達していたら2, それ以外は0
+    """
+    x, y = pos
+    """
+    if x < 0 or x > 1500 :
+        return 1
+    elif y < 0 or y > 750 :
+        return 2
+    else:
+        return 0
+    """
+    
+    if x < 0 or x > WIDTH :
+        return 1
+    elif y < 0 or y > HEIGHT :
+        return 2
+    else:
+        return 0
+    
+def colision_check(rect1:pg.Rect, rect2:pg.Rect):
+    """
+    概要: 2つの矩形が重なっているかどうかを判定する
+    引数: rect1, rect2
+    戻り値: 重なっていたらTrue, それ以外はFalse
+    """
+    return rect1.colliderect(rect2)
+
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -24,6 +55,7 @@ def main():
     bom_rect.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
     bom_vx = 5
     bom_vy = 5
+    print(type(bom_rect))
 
     clock = pg.time.Clock()
     tmr = 0
@@ -37,6 +69,8 @@ def main():
     }
 
     while True:
+        print(kk_rct.topleft)
+
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
@@ -52,6 +86,21 @@ def main():
                 sum_mv[0] += v[0]
                 sum_mv[1] += v[1]
 
+        # キャラクターが画面端に到達したかどうかを判定
+        colision = check_wall_collision(kk_rct.topleft)
+        if colision == 1 or colision == 2:
+            move_rev = [-10 * sum_mv[0], -5 * sum_mv[1]]
+            kk_rct.move_ip(move_rev)
+            continue
+
+        # 爆弾が画面端に到達したかどうかを判定
+        colision = check_wall_collision(bom_rect.topleft)
+        if colision == 1:
+            bom_vx *= -1
+        elif colision == 2:
+            bom_vy *= -1
+
+        # キャラクターの移動
         kk_rct.move_ip(sum_mv)
         # 爆弾の移動
         bom_rect.move_ip(bom_vx, bom_vy)
