@@ -202,6 +202,7 @@ def main():
         if colision_check(kk_rct, bom_rect):
             print("Game Over")
             #gameoverフラグを立てる
+            gameover(screen)
             break
 
         # 5フレームに1回爆弾の向きを変える
@@ -219,7 +220,6 @@ def main():
         tmr += 1
         clock.tick(50)
 
-    gameover(screen)
 
 
 
