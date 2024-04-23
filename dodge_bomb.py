@@ -2,9 +2,44 @@ import os
 import sys
 import pygame as pg
 import random
+import time
 
 WIDTH, HEIGHT = 1600, 900
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
+def change_rotation():
+    """
+    概要：キャラクターの向きを押したキーによって変更する
+    引数：なし
+    戻り値：なし
+    """
+    key_lst = pg.key.get_pressed()
+    if key_lst[pg.K_UP]:
+        pass
+
+def gameover(screen:pg.Surface):
+    """
+    概要: ゲームオーバー画面を表示する
+    引数: なし
+    戻り値: なし
+    """
+    # 画面を黒くする
+    screen.fill((0, 0, 0))
+    # フォントの設定
+    font = pg.font.Font(None, 100)
+    # テキストの描画
+    text = font.render("Game Over", True, (255, 255, 255))
+    screen.blit(text, [WIDTH/2-150, HEIGHT/2])
+    # ゲームオーバーの両方にキャラクターを追加
+    kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0)
+    kk_rct = kk_img.get_rect()
+    kk_rct.center = 900, 400
+    screen.blit(kk_img, kk_rct)
+    kk_rct.center = 700, 400
+    screen.blit(kk_img, kk_rct)
+
+    # 画面を更新して5秒待つ
+    pg.display.update()
+    time.sleep(5)
 
 def check_wall_collision(pos:tuple):
     """
@@ -63,6 +98,9 @@ def main():
     bom_vy = 5
     #print(type(bom_rect))
 
+    # ゲームオーバーのフラグ
+    gameover_f = False
+
     clock = pg.time.Clock()
     tmr = 0
 
@@ -114,11 +152,15 @@ def main():
         # 爆弾とキャラクターが重なっているかどうかを判定
         if colision_check(kk_rct, bom_rect):
             print("Game Over")
-            return
-
+            #gameoverフラグを立てる
+            break
         pg.display.update()
         tmr += 1
         clock.tick(50)
+
+    gameover(screen)
+
+
 
 
 if __name__ == "__main__":
