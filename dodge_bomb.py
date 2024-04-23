@@ -16,6 +16,27 @@ def change_rotation():
     if key_lst[pg.K_UP]:
         pass
 
+bomsize = 10
+
+def change_bom_size(tmr:int,bom:pg.Surface):
+    """
+    概要: 爆弾のサイズを変更する
+    引数: tmr: 経過時間  bom: 爆弾の画像
+    戻り値: なし
+    """
+
+    #
+    #global bomsize
+    #if tmr % 10 == 0:
+    #    bom_img = bom
+    #    bomsize += 10
+    #    bom_img = pg.Surface((100, 100))
+    #    bom_img.set_colorkey((0, 0, 0))
+    #    pg.draw.circle(bom_img, (255, 0, 0), (50, 50), bomsize)
+    #print(bom_img)
+    #return bom_img
+    return 0
+
 def homing_bom(pos:tuple, bom_pos:tuple):
     """
     概要: 定期的に爆弾がキャラクターに向かって移動する
@@ -181,6 +202,9 @@ def main():
             if new_move != [0, 0]:
                 bom_vx = new_move[0]
                 bom_vy = new_move[1]
+
+        # 爆弾のサイズを変更
+        #bom_img = change_bom_size(tmr, bom_img)
         
         pg.display.update()
         tmr += 1
